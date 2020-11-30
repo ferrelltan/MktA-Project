@@ -1,13 +1,27 @@
-## Welcome to my Small Projects!
+## Scraping Reddit Data
 
-I am Ferrell Tanuwidjaja, an 
+This small project takes a look at reddit data utilizing the Reddit API and the PRAW package. Reddit is a highly popular social media website centered around smaller clumps of communities called "subreddits" centered on a particular topic - whether it's general topics like cooking or politics or even niche communities. Inevitably, this may lead to fragmented communities that become echo chambers, like r/conservative which is frequented by conservative-minded people. Alternatively, subreddits can become heavily contested by users with a variety of opinions. Reddit traditionally has a western audience, but has begun to become increasingly global in its userbase. 
 
-### Markdown
+Through this project, we can visualize and analyze Reddit posts and comments in a similar vein to review websites and social media. The challenge lies in sifting through the myriad of comments that do not necessarily reflect user sentiment.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Special mentions to the following guides:
 
+
+### Starter
 ```markdown
-Syntax highlighted code block
+# Packages and settings
+
+import praw
+import os
+import pandas as pd
+import numpy as np
+
+pd.set_option('display.max_rows',     20)
+pd.set_option('display.max_columns',  20)
+pd.set_option('display.width',       800)
+pd.set_option('display.max_colwidth', 20)
+
+np.random.seed(1)
 
 # Header 1
 ## Header 2
