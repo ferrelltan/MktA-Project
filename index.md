@@ -4,7 +4,9 @@ This small project takes a look at reddit data utilizing the Reddit API and the 
 
 Through this project, we can visualize and analyze Reddit posts and comments in a similar vein to review websites and social media. The challenge lies in sifting through the myriad of comments that do not necessarily reflect user sentiment.
 
-Special mentions to the following guides:
+Special thanks to the following guides:
+
+[Scraping Reddit using python - Parth Bhardwaj](https://medium.com/swlh/scraping-reddit-using-python-57e61e322486)
 
 
 ### Starter
@@ -22,6 +24,7 @@ pd.set_option('display.width',       800)
 pd.set_option('display.max_colwidth', 20)
 
 np.random.seed(1)
+'''
 
 # Header 1
 ## Header 2
@@ -38,12 +41,29 @@ np.random.seed(1)
 [Link](url) and ![Image](src)
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+### Building the scraper
 
-### Jekyll Themes
+To build the scraper, we require several things:
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/ferrelltan/MktA-Project/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+-[Reddit's app](https://www.reddit.com/prefs/apps)
+-Reddit account (optional)
 
-### Support or Contact
+We need to create a reddit application to serve as the authenticator. 
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+```markdown
+
+reddit = praw.Reddit(client_id = '', #
+                    client_secret = '', #
+                    user_agent = '') #
+
+```
+
+With this, we can use the reddit app to scrape data from any designated subreddit. For example:
+
+```
+#Top posts on r/all, the all-encompassing subreddit
+hot_posts = reddit.subreddit('all').hot(limit=10)
+for post in hot_posts:
+    print(post.title)
+
+```
