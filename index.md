@@ -4,9 +4,7 @@ This small project takes a look at reddit data utilizing the Reddit API and the 
 
 Through this project, we can visualize and analyze Reddit posts and comments in a similar vein to review websites and social media. The challenge lies in sifting through the myriad of comments that do not necessarily reflect user sentiment.
 
-Special thanks to the following guides:
-
-[Scraping Reddit using python - Parth Bhardwaj](https://medium.com/swlh/scraping-reddit-using-python-57e61e322486)
+For this, we require the [python package _praw_](https://praw.readthedocs.io/en/latest/).
 
 
 ### Starter
