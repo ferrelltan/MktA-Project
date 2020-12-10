@@ -250,7 +250,7 @@ plt.xlabel("Alpha")
 plt.grid()
 plt.legend()
 ```
-The ridge classifier performs much better and uniformly across all different learning rates (see the issues page for the chart).
+The ridge classifier performs much better and uniformly [across all different learning rates](https://github.com/ferrelltan/Scraping-Reddit-Data/issues/4).
 
 # Naive Bayes Classifier
 ```
@@ -316,3 +316,22 @@ plt.legend()
 
 
 ```
+
+We can see that the KNN classifier performs similarly accurately to the Ridge, logistic and Naive Bayes classifiers when the number of neighbors are at 4 or higher. ([Chart here](https://github.com/ferrelltan/Scraping-Reddit-Data/issues/5))
+
+# Decision Tree
+
+```
+from sklearn import tree
+
+tree_clf = DecisionTreeClassifier(max_depth=5)
+tree_clf.fit(X_train,y_train)
+print(tree_clf.score(X_test,y_test))
+
+
+fig = plt.figure(figsize=(25,20))
+tree_selftext = tree.plot_tree(tree_clf,
+                            feature_names=X.columns,
+                           filled=True)
+```
+[Tree Here](https://github.com/ferrelltan/Scraping-Reddit-Data/issues/6)
