@@ -24,7 +24,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes  import GaussianNB
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import RidgeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 
 from sklearn.metrics import confusion_matrix
@@ -132,6 +132,10 @@ selftext_pie
 In this analysis, we want to determine how accurate we can predict whether a given reddit post is a selftext post. To do so, we will need to inspect the feature itself. This target feature, 'is_self' is a binary variable that denotes whether a post is a 'selftext'; that is, a post that consists only of text with no external links or images 
 attached. We will use this as the target of our classifier, using the other features scraped. 
 
+Determining whether a user post is selftext or a link is a way to identify where discussions are taking place in the subreddits, allowing us to locate potential subreddits with high user engagement. That is not to say that non-selftext posts don't yield as much discussion; rather, selftext posts are more often than not an indicator of user-generated content and more intensive discussions compared to the countless social media-like posts (i.e. a meme). Selftext posts can range from complaints, discussions and remarks that may prove to be useful for organizations looking for customer or community input.
+
+# Data Preprocessing
+
 Firstly, we will remove some features we don't require:
 
 The 'url' column is redundant as it is already fulfilled by the 'is_self' column, which describes whether a post is a self-text post or has a url attached to it. Nevertheless, it is useful for further dives into where reddit posts link to. The 'title' feature is also removed, as it contains only the title of the post. Alternatively, we can use a word count method to capture the length of the title, but I opted not to include that since I will be doing so for the 'body' feature (see below). However, I can see how it may actually be a useful feature since post titles act in a similar manner to video or article titles - maybe via a 'clickbait' style.
@@ -222,7 +226,7 @@ plt.show()
 ```
 The linear regression seems to perform very poorly overall on both the training and test sets. We will try several different models:
 
-#Ridge Regression
+# Ridge Classifier
 ```
 #We can set up a grid search here to find the optimal value of the learning
 #rate, alpha
@@ -233,7 +237,7 @@ ridge_testS = []
 
 
 for a in alpharange:
-    ridge = Ridge(alpha=a)
+    ridge = RidgeClassifier(alpha=a)
     ridge.fit(X_train,y_train)
     ridge_trainS.append(ridge.score(X_train,y_train))
     ridge_testS.append(ridge.score(X_test,y_test))
@@ -246,9 +250,9 @@ plt.xlabel("Alpha")
 plt.grid()
 plt.legend()
 ```
-The ridge regression performs similarly poorly across the different learning rates.
+The ridge classifier performs much better and uniformly across all different learning rates (see the issues page for the chart).
 
-#Naive Bayes Classifier
+# Naive Bayes Classifier
 ```
 # Naive Bayes Classifier
 NB = GaussianNB()
@@ -271,7 +275,7 @@ print(precision_score(y_test,NB_predict,average=None))
 ```
 The Naive Bayes Classifier seems to perform incredibly well, with a test score of around 0.95 despite undersampling. Looking at the confusion matrix, however, we see that both the recall and precision is still relatively low. 
 
-#Logistic Regression
+# Logistic Regression
 ```
 
 log = LogisticRegression()
@@ -289,6 +293,26 @@ log_cmat_plot = plot_confusion_matrix(log, X_test, y_test,
 ```
 The logistic regression seems to score well in terms of model accuracy. But the confusion matrix indicates that the model prediction is very inaccurate.
 
+# K-Nearest Classifier
 ```
+#Similarly, we can perform another gridsearch
+neighbors = np.arange(10)+1
+knn_trainS = []
+knn_testS = []
+
+for n in neighbors:
+    model = KNeighborsClassifier(n_neighbors=n)
+    model.fit(X_train, y_train)
+    knn_trainS.append(model.score(X_train, y_train))
+    knn_testS.append(model.score(X_test, y_test))
+
+plt.plot(neighbors, knn_trainS, label="Training Accuracy")
+plt.plot(neighbors, knn_testS, label="Test Accuracy")
+plt.title("KNN Scores")
+plt.ylabel("Accuracy")
+plt.xlabel("Number of Neighbors")
+plt.grid()
+plt.legend()
+
 
 ```
