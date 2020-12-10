@@ -143,7 +143,7 @@ The item 'created' is the timestamp for the submission of the post in unix time.
 
 The 'distinguished' column denotes whether a post is an admin-made post or a generic post. Currently, we cannot train the model with this feature due to it being the wrong object type, but since it is a binary variable we can turn this into integers 0 & 1.
 
-One thing to note however is that the dataset I obtained is heavily imbalanced towards the negative ('is_self' = False). So, we will try to tackle this by undersampling (a 60-40 train-test split).
+One thing to note however is that the dataset I obtained is [heavily imbalanced towards](https://github.com/ferrelltan/Scraping-Reddit-Data/issues/1) the negative ('is_self' = False). So, we will try to tackle this by undersampling (a 60-40 train-test split).
 
 ```
 #Create a wordcount for text in body
