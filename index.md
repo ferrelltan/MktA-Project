@@ -145,7 +145,7 @@ The item 'created' is the timestamp for the submission of the post in unix time.
 
 The 'distinguished' column denotes whether a post is an admin-made post or a generic post. Currently, we cannot train the model with this feature due to it being the wrong object type, but since it is a binary variable we can turn this into integers 0 & 1.
 
-One thing to note however is that this dataset is heavily imbalanced towards the negative ('is_self' = False). So, we will try to tackle this by undersampling (a 60-40 train-test split).
+One thing to note however is that the dataset I obtained is heavily imbalanced towards the negative ('is_self' = False). So, we will try to tackle this by undersampling (a 60-40 train-test split).
 
 ```
 #Create a wordcount for text in body
@@ -220,8 +220,35 @@ plt.xlabel('Coefficients')
 plt.ylabel('Accuracy')
 plt.show()
 ```
-The linear regression seems to perform very poorly overall on both the training and test sets. Perhaps we need to try a different model.
+The linear regression seems to perform very poorly overall on both the training and test sets. We will try several different models:
 
+#Ridge Regression
+```
+#We can set up a grid search here to find the optimal value of the learning
+#rate, alpha
+
+alpharange = np.arange(start=0.05,stop=1.0,step=0.05)
+ridge_trainS = []
+ridge_testS = []
+
+
+for a in alpharange:
+    ridge = Ridge(alpha=a)
+    ridge.fit(X_train,y_train)
+    ridge_trainS.append(ridge.score(X_train,y_train))
+    ridge_testS.append(ridge.score(X_test,y_test))
+
+plt.plot(alpharange, ridge_trainS, label="Training Accuracy")
+plt.plot(alpharange, ridge_testS, label="Test Accuracy")
+plt.title("Ridge Scores")
+plt.ylabel("Accuracy")
+plt.xlabel("Alpha")
+plt.grid()
+plt.legend()
+```
+The ridge regression performs similarly poorly across the different learning rates.
+
+#Naive Bayes Classifier
 ```
 # Naive Bayes Classifier
 NB = GaussianNB()
@@ -241,4 +268,27 @@ NB_cmat_plot = plot_confusion_matrix(NB, X_test, y_test,
 
 print(recall_score(y_test,NB_predict,average=None))
 print(precision_score(y_test,NB_predict,average=None))
+```
+The Naive Bayes Classifier seems to perform incredibly well, with a test score of around 0.95 despite undersampling. Looking at the confusion matrix, however, we see that both the recall and precision is still relatively low. 
+
+#Logistic Regression
+```
+
+log = LogisticRegression()
+log.fit(X_train,y_train)
+
+log.score(X_train, y_train)
+log.score(X_test,y_test)
+
+log_predict = log.predict(X_test)
+log_cmat = confusion_matrix(y_test,log_predict)
+
+log_cmat_plot = plot_confusion_matrix(log, X_test, y_test,
+                                  cmap=plt.cm.Blues,
+                                  normalize='all')
+```
+The logistic regression seems to score well in terms of model accuracy. But the confusion matrix indicates that the model prediction is very inaccurate.
+
+```
+
 ```
