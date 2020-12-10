@@ -145,6 +145,8 @@ The item 'created' is the timestamp for the submission of the post in unix time.
 
 The 'distinguished' column denotes whether a post is an admin-made post or a generic post. Currently, we cannot train the model with this feature due to it being the wrong object type, but since it is a binary variable we can turn this into integers 0 & 1.
 
+One thing to note however is that this dataset is heavily imbalanced towards the negative ('is_self' = False). So, we will try to tackle this by undersampling (a 60-40 train-test split).
+
 ```
 #Create a wordcount for text in body
 
@@ -199,7 +201,7 @@ Now that we have our processed dataframe, we will be able to attempt to classify
 X = df.drop(columns=['title','is_self','id','url','body','date', 'subreddit'])
 y = df['is_self']
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
 ```
 
 The first thing we can try is a linear regression.
