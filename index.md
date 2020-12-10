@@ -5,6 +5,8 @@ Through this project, we can visualize and analyze Reddit posts and comments in 
 
 For this, we require the [python package _praw_](https://praw.readthedocs.io/en/latest/).
 
+**NOTE**: With how Github pages is set up, there is no way for me to include pictures into this page. So alternatively, I have placed the visualizations in the issues tab on this repository.
+
 ### Starter
 ```markdown
 # Packages and settings
@@ -128,7 +130,7 @@ selftext_pie
 
 ```
 In this analysis, we want to determine how accurate we can predict whether a given reddit post is a selftext post. To do so, we will need to inspect the feature itself. This target feature, 'is_self' is a binary variable that denotes whether a post is a 'selftext'; that is, a post that consists only of text with no external links or images 
-attached. We will use this as the target of our classifier, using the other features scraped.
+attached. We will use this as the target of our classifier, using the other features scraped. 
 
 Firstly, we will remove some features we don't require:
 
@@ -203,6 +205,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random
 The first thing we can try is a linear regression.
 
 ```
+#Linear Regression
 lr = LinearRegression()
 lr.fit(X_train,y_train)
 
@@ -215,4 +218,25 @@ plt.xlabel('Coefficients')
 plt.ylabel('Accuracy')
 plt.show()
 ```
+The linear regression seems to perform very poorly overall on both the training and test sets. Perhaps we need to try a different model.
 
+```
+# Naive Bayes Classifier
+NB = GaussianNB()
+NB.fit(X_train,y_train)
+
+print(NB.score(X_train,y_train))
+print(NB.score(X_test,y_test))
+
+#Confusion matrix
+
+NB_predict = NB.predict(X_test)
+NB_cmat = confusion_matrix(y_test,NB_predict)
+
+NB_cmat_plot = plot_confusion_matrix(NB, X_test, y_test,
+                                  cmap=plt.cm.Blues,
+                                  normalize='true')
+
+print(recall_score(y_test,NB_predict,average=None))
+print(precision_score(y_test,NB_predict,average=None))
+```
