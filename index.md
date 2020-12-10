@@ -226,7 +226,7 @@ plt.show()
 ```
 The linear regression seems to perform very poorly overall on both the training and test sets. We will try several different models:
 
-# Ridge Classifier
+### Ridge Classifier
 ```
 #We can set up a grid search here to find the optimal value of the learning
 #rate, alpha
@@ -252,7 +252,7 @@ plt.legend()
 ```
 The ridge classifier performs much better and uniformly [across all different learning rates](https://github.com/ferrelltan/Scraping-Reddit-Data/issues/4).
 
-# Naive Bayes Classifier
+### Naive Bayes Classifier
 ```
 # Naive Bayes Classifier
 NB = GaussianNB()
@@ -275,7 +275,7 @@ print(precision_score(y_test,NB_predict,average=None))
 ```
 The Naive Bayes Classifier seems to perform incredibly well, with a test score of around 0.95 despite undersampling. Looking at the confusion matrix, however, we see that both the recall and precision is still relatively low. 
 
-# Logistic Regression
+### Logistic Regression
 ```
 
 log = LogisticRegression()
@@ -293,7 +293,7 @@ log_cmat_plot = plot_confusion_matrix(log, X_test, y_test,
 ```
 The logistic regression seems to score well in terms of model accuracy. But the confusion matrix indicates that the model prediction is very inaccurate.
 
-# K-Nearest Classifier
+### K-Nearest Classifier
 ```
 #Similarly, we can perform another gridsearch
 neighbors = np.arange(10)+1
@@ -317,9 +317,11 @@ plt.legend()
 
 ```
 
-We can see that the KNN classifier performs similarly accurately to the Ridge, logistic and Naive Bayes classifiers when the number of neighbors are at 4 or higher. ([Chart here](https://github.com/ferrelltan/Scraping-Reddit-Data/issues/5))
+We can see that the KNN classifier performs similarly accurately to the Ridge, logistic and Naive Bayes classifiers when the number of neighbors are at 4 or higher. 
 
-# Decision Tree
+([Chart here](https://github.com/ferrelltan/Scraping-Reddit-Data/issues/5))
+
+### Decision Tree
 
 ```
 from sklearn import tree
@@ -351,3 +353,11 @@ plot_feature_importances(tree_clf)
 
 
 [Feature Importance here](https://github.com/ferrelltan/Scraping-Reddit-Data/issues/6)
+
+
+The decision tree classifier looks to be the best model thus far, with high accuracy scores for both the training and test sets. The feature importances chart also indicates how important the word count on the post's body is, alongside the number of comments. This is in line with the way selftexts are entirely construed of text, whereas image posts and general questions normally don't have a body.
+
+
+## Conclusion
+
+It seems that we are able to adequately classify the data we scraped from reddit. The greatest point of caution remains, however, that the data I retrieved was highly imbalanced and likely more consideration on especially given how inaccurate the predictions were. Nevertheless, the models beyond linear regression still seem to yield relatively high accuracies. But there remains a variety of other classifiers we can run on the dataset we retrieved.
