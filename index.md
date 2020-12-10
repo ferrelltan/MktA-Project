@@ -39,29 +39,17 @@ pd.set_option('display.max_colwidth', 20)
 np.random.seed(1)
 '''
 
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
 ```
 
 ### Building the scraper
 To build the scraper, we require:
 
-[Reddit's app](https://www.reddit.com/prefs/apps)
+- [Reddit's app](https://www.reddit.com/prefs/apps)
 
 We need to create a reddit application to serve as the authenticator. This is done via the PRAW package, which connects to the application you can create from the link above. The application is needed to serve as an authenticator to allow Reddit scraping; it is possible to do this via a different package like BeautifulSoup, but the PRAW package is heavily personalized to tackle reddit scraping.
 
 To create the reddit app, click on the link above and click the create application option (note: this may require you to create a reddit account). Once you've created the application, the application will have several information that PRAW will require to create the scraper. 
+
 ```markdown
 
 reddit = praw.Reddit(client_id = '', #Id name under your application name
@@ -83,7 +71,13 @@ for post in hot_posts:
 
 ### The Scraper
 
-We can utilize reddit data to illustrate certain trends in the userbase. There is a great number of data you can pull via the PRAW package. These are separated into 3 different types: subreddits, posts and comments. For the purposes of this analysis, we will be focusing on user posts. Under these posts, there are a variety of different attributes we can retrieve; this ranges from attributes like post scores, upvote (like/dislike) ratio and others.
+We can utilize reddit data to illustrate certain trends in the userbase. There is a great number of data you can pull via the PRAW package. These are separated into 3 different types: 
+
+- Subreddits
+- Reddit Posts
+- Post Comments
+
+For the purposes of this analysis, we will be focusing on user posts. Under these posts, there are a variety of different attributes we can retrieve; this ranges from attributes like post scores, upvote (like/dislike) ratio and others.
 
 We can set up the scraper to scrape posts in the different 'subreddits' (message boards/forums) dedicated to specific fields. In this case, we will be using the subreddit 'all', which serves as the front page of reddit where posts with the highest metrics (i.e. comments, upvotes) or the fastest traction (i.e. high number of comments in a short time span) in a given time period appear from across all of the different subreddits. This serves as a way to gauge reddit data as a whole, though the caveat remains that some subreddits - particularly controversial or R18 ones - are typically prohibited from appearing in r/all. Furthermore, since this subreddit only accounts for posts with the highest metrics or fastest traction, this may not capture reddit as a whole. Either way, we can easily substitute the subreddit we wish to scrape from by replacing 'all' by a given subreddit.
 
@@ -291,6 +285,8 @@ log_cmat_plot = plot_confusion_matrix(log, X_test, y_test,
                                   cmap=plt.cm.Blues,
                                   normalize='all')
 ```
+[Confusion Matrix Here](https://github.com/ferrelltan/Scraping-Reddit-Data/issues/8)
+
 The logistic regression seems to score well in terms of model accuracy. But the confusion matrix indicates that the model prediction is very inaccurate.
 
 ### K-Nearest Classifier
@@ -316,10 +312,9 @@ plt.legend()
 
 
 ```
+([Chart here](https://github.com/ferrelltan/Scraping-Reddit-Data/issues/5))
 
 We can see that the KNN classifier performs similarly accurately to the Ridge, logistic and Naive Bayes classifiers when the number of neighbors are at 4 or higher. 
-
-([Chart here](https://github.com/ferrelltan/Scraping-Reddit-Data/issues/5))
 
 ### Decision Tree
 
