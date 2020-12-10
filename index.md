@@ -328,10 +328,26 @@ tree_clf = DecisionTreeClassifier(max_depth=5)
 tree_clf.fit(X_train,y_train)
 print(tree_clf.score(X_test,y_test))
 
-
+#Tree Chart
 fig = plt.figure(figsize=(25,20))
 tree_selftext = tree.plot_tree(tree_clf,
                             feature_names=X.columns,
                            filled=True)
+                           
+#Feature Importance
+
+def plot_feature_importances(model):
+    n_features = X.shape[1]
+    plt.figure(figsize=(20,20))
+    plt.barh(range(n_features), model.feature_importances_, align='center')
+    plt.yticks(np.arange(n_features), X.columns)
+    plt.xlabel("Feature importance")
+    plt.ylabel("Feature")
+    plt.ylim(-1, n_features)
+
+plot_feature_importances(tree_clf)
 ```
 [Tree Here](https://github.com/ferrelltan/Scraping-Reddit-Data/issues/6)
+
+
+[Feature Importance here](https://github.com/ferrelltan/Scraping-Reddit-Data/issues/6)
