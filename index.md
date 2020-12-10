@@ -1,4 +1,9 @@
-## Reddit Scraper
+## Scraping Reddit Post Data
+This small project takes a look at reddit data utilizing the Reddit API and the PRAW package. Reddit is a highly popular social media website centered around smaller clumps of communities called "subreddits" centered on a particular topic - whether it's general topics like cooking or politics or even niche communities. Inevitably, this may lead to fragmented communities that become echo chambers. Alternatively, subreddits can become heavily contested by users with a variety of opinions. Reddit traditionally has a western audience, but has begun to become increasingly global in its userbase. We can look to the reddit userbase in a similar manner to other social media websites to see where common trends are moving, whether it's technology, pop culture, political ideas or others. Organizations seeking close engagement with social media may wish to see reddit as an avenue for gauging user interest.
+
+Through this project, we can visualize and analyze Reddit posts and comments in a similar vein to review websites and social media. The challenge lies in sifting through the myriad of comments that do not necessarily reflect user sentiment.
+
+For this, we require the [python package _praw_](https://praw.readthedocs.io/en/latest/).
 
 ### Starter
 ```markdown
@@ -19,6 +24,10 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes  import GaussianNB
 from sklearn.linear_model import Ridge
 from sklearn.neighbors import KNeighborsClassifier
+
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import plot_confusion_matrix
+from sklearn.metrics import precision_score, recall_score
 
 pd.set_option('display.max_rows',     20)
 pd.set_option('display.max_columns',  20)
@@ -70,11 +79,14 @@ for post in hot_posts:
 ```
 
 
-## Data Analysis
+### The Scraper
 
-We can utilize reddit data to illustrate certain trends in the userbase. There is a great number of data you can pull via the PRAW package. These are separated into 3 different types: subreddits, posts and comments. For the purposes of this analysis, we will be focusing on user posts.
+We can utilize reddit data to illustrate certain trends in the userbase. There is a great number of data you can pull via the PRAW package. These are separated into 3 different types: subreddits, posts and comments. For the purposes of this analysis, we will be focusing on user posts. Under these posts, there are a variety of different attributes we can retrieve; this ranges from attributes like post scores, upvote (like/dislike) ratio and others.
+
+We can set up the scraper to scrape posts in the different 'subreddits' (message boards/forums) dedicated to specific fields. In this case, we will be using the subreddit 'all', which serves as the front page of reddit where posts with the highest metrics (i.e. comments, upvotes) or the fastest traction (i.e. high number of comments in a short time span) in a given time period appear from across all of the different subreddits. This serves as a way to gauge reddit data as a whole, though the caveat remains that some subreddits - particularly controversial or R18 ones - are typically prohibited from appearing in r/all. Furthermore, since this subreddit only accounts for posts with the highest metrics or fastest traction, this may not capture reddit as a whole. Either way, we can easily substitute the subreddit we wish to scrape from by replacing 'all' by a given subreddit.
 
 ```markdown
+#Setting up the scraper
 posts = []
 
 r_all = reddit.subreddit('all')
@@ -174,5 +186,33 @@ df['distinguished'].unique()
 df['distinguished'] = df['distinguished'].map({'admin':1})
 df['distinguished'] = df['distinguished'].fillna(0) #because the feature previously either returns 'admin' or an empty space, we need to fill the NA values with 0
 df['distinguished'] = df['distinguished'].astype(int)
+```
+
+### Analysis: Classifying selftext posts
+
+Now that we have our processed dataframe, we will be able to attempt to classify selftext posts.
+
+```
+#Data Splits
+X = df.drop(columns=['title','is_self','id','url','body','date', 'subreddit'])
+y = df['is_self']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
+```
+
+The first thing we can try is a linear regression.
+
+```
+lr = LinearRegression()
+lr.fit(X_train,y_train)
+
+print(lr.score(X_train,y_train))
+print(lr.score(X_test,y_test))
+
+plt.plot(lr.coef_)
+plt.title('Linear Regression Coefficients')
+plt.xlabel('Coefficients')
+plt.ylabel('Accuracy')
+plt.show()
 ```
 
